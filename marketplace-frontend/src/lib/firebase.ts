@@ -14,6 +14,9 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || 'G-ZXZ97DXSNZ',
 };
 
+// Google OAuth Client ID
+export const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '142824053194-72ptip2394jqfs9u904vol0osk5hnovp.apps.googleusercontent.com';
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
