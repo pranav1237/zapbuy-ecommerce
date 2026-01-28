@@ -1,0 +1,52 @@
+/* Global styles (Tailwind directives removed for editor diagnostics).
+   Note: Tailwind utilities require PostCSS processing during build. This file
+   provides equivalent base styles so the editor doesn't report unknown at-rules.
+*/
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body { background-color: #ffffff; color: #111827; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+
+/* Custom utility classes (approximated) */
+.container-main { max-width: 80rem; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
+
+.btn-primary { padding: 0.5rem 1.5rem; background-color: #2563eb; color: #ffffff; border-radius: 0.5rem; font-weight: 500; transition: background-color 0.2s ease; }
+.btn-primary:hover { background-color: #1e40af; }
+
+.btn-secondary { padding: 0.5rem 1.5rem; background-color: #e5e7eb; color: #111827; border-radius: 0.5rem; font-weight: 500; }
+.btn-secondary:hover { background-color: #d1d5db; }
+
+.btn-outline { padding: 0.5rem 1.5rem; border: 1px solid #d1d5db; color: #111827; border-radius: 0.5rem; }
+
+.input-base { width: 100%; padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; }
+.input-base:focus { outline: none; box-shadow: 0 0 0 4px rgba(99,102,241,0.08); border-color: #6366f1; }
+
+.card { background-color: #ffffff; border-radius: 0.75rem; box-shadow: 0 4px 14px rgba(14, 22, 37, 0.08); transition: box-shadow 0.2s ease; padding: 1rem; }
+.card:hover { box-shadow: 0 8px 30px rgba(14, 22, 37, 0.12); }
+
+.badge { display: inline-block; padding: 0.25rem 0.75rem; background-color: #e5e7eb; color: #111827; border-radius: 9999px; font-size: 0.875rem; }
+
+.rating-stars { display: flex; align-items: center; gap: 0.25rem; }
+.star { width: 1rem; height: 1rem; color: #f59e0b; }
+
+/* 3D and Animation Effects */
+@keyframes blob { 0%,100%{ transform: translate(0,0) scale(1); } 25%{ transform: translate(20px,-50px) scale(1.1);} 50%{ transform: translate(-20px,20px) scale(0.9);} 75%{ transform: translate(50px,50px) scale(1.05);} }
+.animate-blob { animation: blob 7s infinite; }
+.animation-delay-2000 { animation-delay: 2s; }
+.animation-delay-4000 { animation-delay: 4s; }
+
+/* Smooth transitions */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.animate-fade-in-up { animation: fadeInUp 0.6s ease-out; }
+
+/* Glass effect (approx) */
+.glass-effect { background-color: rgba(255,255,255,0.08); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.12); }
+
+/* Gradient text */
+.gradient-text { background-image: linear-gradient(90deg,#a78bfa,#ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* Shadow effects */
+.shadow-glow { box-shadow: 0 8px 30px rgba(167,139,250,0.18); }
+.shadow-glow-pink { box-shadow: 0 8px 30px rgba(236,72,153,0.12); }
