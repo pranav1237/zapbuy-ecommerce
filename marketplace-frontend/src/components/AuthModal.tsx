@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mail, Lock, User } from 'lucide-react';
+import { X, Mail, Lock, User, AlertCircle } from 'lucide-react';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -24,17 +24,30 @@ export function AuthModal({ isOpen, onClose, type = 'customer' }: AuthModalProps
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
     try {
+      if (!name.trim()) {
+        throw new Error('Please enter your name');
+      }
+      if (password.length < 6) {
+        throw new Error('Password must be at least 6 characters');
+      }
       const result = await createUserWithEmailAndPassword(auth, email, password);
       await result.user.updateProfile({ displayName: name });
-      toast.success(`Welcome ${name}!`);
+      toast.success(`Welcome ${name}! 🎉`);
+      setEmail('');
+      setPassword('');
+      setName('');
       onClose();
     } catch (error: any) {
-      toast.error(error.message);
+      const errorMsg = error.message || 'Sign up failed';
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -42,27 +55,47 @@ export function AuthModal({ isOpen, onClose, type = 'customer' }: AuthModalProps
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      toast.success('Signed in successfully!');
+      toast.success('Signed in successfully! ✓');
+      setEmail('');
+      setPassword('');
       onClose();
     } catch (error: any) {
-      toast.error(error.message);
+      const errorMsg = error.message || 'Sign in failed';
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleSignIn = async () => {
+    setError('');
     setLoading(true);
     try {
       const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
       await signInWithPopup(auth, provider);
-      toast.success('Signed in with Google!');
+      toast.success('Signed in with Google! 🎉');
+      setEmail('');
+      setPassword('');
+      setMode('login');
       onClose();
     } catch (error: any) {
-      toast.error(error.message);
+      console.error('Google Sign-in Error:', error);
+      let errorMsg = 'Google sign-in failed';
+      if (error.code === 'auth/popup-blocked') {
+        errorMsg = 'Popup was blocked. Please allow popups for this site.';
+      } else if (error.code === 'auth/popup-closed-by-user') {
+        errorMsg = 'Sign-in was cancelled.';
+      } else if (error.message) {
+        errorMsg = error.message;
+      }
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -115,6 +148,17 @@ export function AuthModal({ isOpen, onClose, type = 'customer' }: AuthModalProps
                 onSubmit={mode === 'login' ? handleSignIn : handleSignUp}
                 className="space-y-4"
               >
+                {/* Error Alert */}
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-3 bg-red-50 border border-red-200 rounded-lg flex gap-2"
+                  >
+                    <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                    <p className="text-sm text-red-700">{error}</p>
+                  </motion.div>
+                )}
                 {mode === 'signup' && (
                   <div className="relative">
                     <User className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />

@@ -1,11 +1,21 @@
 'use client';
 
 import { Navigation } from '@/components/Navigation';
-import { Hero3D } from '@/components/Hero3D';
+import { Footer } from '@/components/Footer';
 import { ProductCard } from '@/components/ProductCard';
 import { motion } from 'framer-motion';
+import { ShoppingBag, Truck, Shield, Zap } from 'lucide-react';
+import { useAuth } from '@/lib/auth-context';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
+  const { user } = useAuth();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const featuredProducts = [
     {
       id: '1',
@@ -49,149 +59,143 @@ export default function Home() {
     },
     {
       id: '5',
-      name: 'Wireless Keyboard',
-      image: 'https://images.unsplash.com/photo-1587829191301-72e2b5eaf1ee?w=400&h=400&fit=crop',
-      price: 3499,
+      name: 'Premium Yoga Mat',
+      image: 'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=400&h=400&fit=crop',
+      price: 1999,
       rating: 4.6,
-      reviews: 67,
-      vendor: 'TechHub',
+      reviews: 73,
+      vendor: 'FitnessGear',
       inStock: true,
     },
     {
       id: '6',
-      name: 'Premium Sunglasses',
-      image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=400&fit=crop',
-      price: 4999,
-      rating: 4.9,
-      reviews: 34,
-      vendor: 'StyleMax',
+      name: 'Wireless Gaming Mouse',
+      image: 'https://images.unsplash.com/photo-1527814050087-3793815479db?w=400&h=400&fit=crop',
+      price: 3499,
+      rating: 4.4,
+      reviews: 156,
+      vendor: 'GamingZone',
       inStock: true,
     },
   ];
 
+  if (!isClient) return null;
+
   return (
-    <main className="w-full">
+    <div className="min-h-screen bg-white">
       <Navigation />
       
-      {/* Hero 3D Section */}
-      <Hero3D />
-
-      {/* Featured Products Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-gray-50">
+      {/* Hero Section */}
+      <section className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 via-purple-900 to-white">
         <div className="max-w-7xl mx-auto">
-          {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center py-20"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Featured <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">Products</span>
-            </h2>
-            <p className="text-xl text-gray-600">Discover our curated collection from trusted local vendors</p>
-          </motion.div>
-
-          {/* Products Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProducts.map((product, index) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <ProductCard {...product} />
-              </motion.div>
-            ))}
-          </div>
-
-          {/* CTA Button */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="text-center mt-16"
-          >
+            <h1 className="text-5xl sm:text-6xl font-bold text-white mb-6">
+              Welcome to <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">ZapBuy</span>
+            </h1>
+            <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
+              Discover amazing products from trusted local vendors. Shop smart, save more.
+            </p>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-10 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-lg rounded-lg hover:shadow-xl transition"
+              className="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-xl transition"
             >
-              View All Products
+              Start Shopping
             </motion.button>
           </motion.div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-purple-900 to-pink-900 text-white">
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            className="text-4xl font-bold text-center mb-16"
-          >
-            Why Choose Us
-          </motion.h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {[
-              { icon: '🚚', title: 'Fast Delivery', description: 'Quick and reliable shipping to your doorstep' },
-              { icon: '🛡️', title: 'Secure Payment', description: 'Multiple payment options with secure transactions' },
-              { icon: '⭐', title: 'Quality Guaranteed', description: 'Hand-picked products from trusted vendors' },
-            ].map((feature, index) => (
+              { icon: ShoppingBag, title: 'Wide Selection', desc: '10,000+ products' },
+              { icon: Truck, title: 'Fast Shipping', desc: 'Free on orders ₹500+' },
+              { icon: Shield, title: 'Secure Payment', desc: 'SSL encrypted' },
+              { icon: Zap, title: 'Best Deals', desc: 'Exclusive offers daily' },
+            ].map((feature, i) => (
               <motion.div
-                key={index}
+                key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: i * 0.1 }}
                 className="text-center"
               >
-                <div className="text-6xl mb-4">{feature.icon}</div>
-                <h3 className="text-2xl font-bold mb-2">{feature.title}</h3>
-                <p className="text-purple-100">{feature.description}</p>
+                <div className="flex justify-center mb-4">
+                  <div className="p-3 bg-purple-100 rounded-full">
+                    <feature.icon className="w-6 h-6 text-purple-600" />
+                  </div>
+                </div>
+                <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
+                <p className="text-gray-600">{feature.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-12 px-4 sm:px-6 lg:px-8">
+      {/* Featured Products Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h4 className="font-bold text-white mb-4">About</h4>
-              <p>Your trusted local marketplace for quality products</p>
-            </div>
-            <div>
-              <h4 className="font-bold text-white mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                <li><a href="#" className="hover:text-white">Products</a></li>
-                <li><a href="#" className="hover:text-white">Vendors</a></li>
-                <li><a href="#" className="hover:text-white">Support</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold text-white mb-4">Legal</h4>
-              <ul className="space-y-2">
-                <li><a href="#" className="hover:text-white">Privacy</a></li>
-                <li><a href="#" className="hover:text-white">Terms</a></li>
-                <li><a href="#" className="hover:text-white">Contact</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold text-white mb-4">Follow Us</h4>
-              <p>Social media links coming soon</p>
-            </div>
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl font-bold mb-4">Featured Products</h2>
+            <p className="text-gray-600 text-lg">Trending items from our top vendors</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredProducts.map((product, index) => (
+              <motion.div
+                key={product.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <ProductCard {...product} />
+              </motion.div>
+            ))}
           </div>
-          <div className="border-t border-gray-700 pt-8 text-center">
-            <p>&copy; 2024 Marketplace. All rights reserved.</p>
-          </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="text-center mt-12"
+          >
+            <button className="px-8 py-3 border-2 border-purple-600 text-purple-600 font-semibold rounded-lg hover:bg-purple-600 hover:text-white transition">
+              View All Products
+            </button>
+          </motion.div>
         </div>
-      </footer>
-    </main>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-purple-600 to-pink-600">
+        <div className="max-w-4xl mx-auto text-center text-white">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+          >
+            <h2 className="text-4xl font-bold mb-4">Become a Vendor</h2>
+            <p className="text-xl mb-8 opacity-90">Reach millions of customers and grow your business</p>
+            <button className="px-8 py-3 bg-white text-purple-600 font-semibold rounded-lg hover:shadow-xl transition">
+              Start Selling
+            </button>
+          </motion.div>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
   );
 }
 
