@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Analytics } from '@vercel/analytics/next';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from '@/lib/auth-context';
 import '@/styles/globals.css';
@@ -21,6 +22,7 @@ export default function RootLayout({
           {children}
           <Toaster position="top-right" />
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
