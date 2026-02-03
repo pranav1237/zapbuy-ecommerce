@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Menu, X, ShoppingCart, User, LogOut, Settings } from 'lucide-react';
+import { Menu, X, ShoppingCart, User, LogOut, Settings, Package } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { auth } from '@/lib/firebase';
+import { useCartStore } from '@/lib/stores';
 import { AuthModal } from './AuthModal';
 import Link from 'next/link';
 
@@ -12,7 +13,21 @@ export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const { user, isAdmin, isVendor } = useAuth();
+  const { getTotalItems } = useCartStore();
+
+  useEffect(() => {
+    // Update cart count on mount and when store changes
+    setCartCount(getTotalItems());
+    
+    // Subscribe to store changes
+    const unsubscribe = useCartStore.subscribe((state) => {
+      setCartCount(state.items.reduce((sum, item) => sum + item.quantity, 0));
+    });
+    
+    return () => unsubscribe();
+  }, [getTotalItems]);
 
   const handleLogout = async () => {
     await auth.signOut();
@@ -55,16 +70,20 @@ export function Navigation() {
             {/* Right Side */}
             <div className="flex items-center gap-4">
               {/* Cart */}
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative p-2 hover:bg-gray-100 rounded-lg transition"
-              >
-                <ShoppingCart className="w-6 h-6 text-gray-700" />
-                <span className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                  0
-                </span>
-              </motion.button>
+              <Link href="/cart">
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative p-2 hover:bg-gray-100 rounded-lg transition"
+                >
+                  <ShoppingCart className="w-6 h-6 text-gray-700" />
+                  {cartCount > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-purple-600 text-white text-xs rounded-full flex items-center justify-center font-medium">
+                      {cartCount > 9 ? '9+' : cartCount}
+                    </span>
+                  )}
+                </motion.div>
+              </Link>
 
               {/* User Menu */}
               {user ? (
@@ -93,6 +112,13 @@ export function Navigation() {
                       >
                         <User className="w-4 h-4" />
                         Profile
+                      </Link>
+                      <Link
+                        href="/orders"
+                        className="flex items-center gap-2 px-4 py-3 text-gray-700 hover:bg-gray-100 transition"
+                      >
+                        <Package className="w-4 h-4" />
+                        My Orders
                       </Link>
                       {isVendor && (
                         <Link
